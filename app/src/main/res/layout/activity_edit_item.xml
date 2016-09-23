@@ -14,31 +14,43 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:id="@+id/editLabel"
-        android:text="@string/edit_label" />
+        android:text="@string/edit_label"
+        android:textColor="@color/medium_grey"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/editEditText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:imeOptions="actionDone"
+            android:inputType="textPersonName"
+            android:textColor="@color/medium_grey"
+            android:textSize="18sp"/>
 
         <Button
             android:id="@+id/btnEditItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
             android:onClick="onEdiItem"
             android:text="@string/edit"
-            style="@style/Widget.AppCompat.Button"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button"
+            android:textSize="20sp"
+            android:textColor="@color/medium_grey"
             android:elevation="8dp" />
 
     </LinearLayout>
