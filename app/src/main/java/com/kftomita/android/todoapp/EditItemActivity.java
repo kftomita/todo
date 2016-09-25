@@ -35,7 +35,6 @@ public class EditItemActivity extends AppCompatActivity {
     }
 
     public void onEdiItem(View view) {
-        //Update Array with new value
         mItem = mEditText.getText().toString();
 
         Intent mData = new Intent();

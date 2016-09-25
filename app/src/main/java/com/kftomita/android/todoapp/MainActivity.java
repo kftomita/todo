@@ -24,14 +24,11 @@ import static com.kftomita.android.todoapp.R.id.etEditText;
 
 public class MainActivity extends AppCompatActivity {
 
-//    ArrayList<String> mItems;
-//    ArrayAdapter<String> mItemsAdapter;
     ArrayList<ToDo> mItems;
     ArrayAdapter<ToDo> mItemsAdapter;
     ListView mLvItems;
     EditText mEtEditText;
     private final int REQUEST_CODE = 100;
-    private ToDoDataSource mDataSource;
     private SQLiteHelper mDbHelper;
 
     @Override
@@ -41,10 +38,12 @@ public class MainActivity extends AppCompatActivity {
 
         mDbHelper = new SQLiteHelper(this);
         mItems = new ArrayList<ToDo>();
+
         populateArrayItems();
         mLvItems = (ListView) findViewById(R.id.lvitems);
-        mLvItems.setAdapter(mItemsAdapter);
         mEtEditText = (EditText) findViewById(etEditText);
+        mLvItems.setAdapter(mItemsAdapter);
+        //hide keyboard
         getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
         );
@@ -64,10 +63,11 @@ public class MainActivity extends AppCompatActivity {
                         ToDo mValue = mItems.get(pos);
                         String mValueName = mValue.getItem();
 
+                        //Remove items from array
                         mItems.remove(pos);
                         mItemsAdapter.notifyDataSetChanged();
-//                        writeItems();
 
+                        //Remove item from db
                         String selection = SQLiteHelper.COLUMN_TODO + " LIKE ?";
                         String[] args = {mValueName};
                         SQLiteDatabase db = mDbHelper.getReadableDatabase();
@@ -107,9 +107,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void populateArrayItems(){
-//        readItems();
-//        mItemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mItems);
-
+        //Fetch data from db
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         String[] mProjection = {
                 SQLiteHelper.COLUMN_TODO
@@ -117,17 +115,10 @@ public class MainActivity extends AppCompatActivity {
 
         String mSortOrder = SQLiteHelper.COLUMN_ID + " ASC";
         Cursor c = db.query(SQLiteHelper.TABLE_TODO, mProjection,null, null, null, null, mSortOrder);
-        System.out.println("MOVE CURSOR FIRST");
-        //c.moveToFirst();
-        System.out.println("BEFORE LOOP:"+ c.getCount());
-
 
         if(c.getCount() > 0) {
-            //
             while (c.moveToNext()) {
-                System.out.println("inside LOOP");
                 String mValue = c.getString(c.getColumnIndex(SQLiteHelper.COLUMN_TODO));
-                System.out.println("mValue:" + mValue);
                 ToDo mTodo = new ToDo();
                 mTodo.setItem(mValue);
                 mItems.add(mTodo);
@@ -158,8 +149,8 @@ public class MainActivity extends AppCompatActivity {
             mTodo.setItem(mAddValue);
             mItemsAdapter.add(mTodo);
             mEtEditText.setText("");
-//        writeItems();
 
+            //Add to database
             SQLiteDatabase db = mDbHelper.getWritableDatabase();
             ContentValues mValues = new ContentValues();
             mValues.put(SQLiteHelper.COLUMN_TODO,mAddValue);
@@ -173,32 +164,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void readItems(){
-//        File mFilesDir = getFilesDir();
-//        File mFile = new File(mFilesDir, "todo.txt");
-//        if(mFile.exists()) {
-//            try {
-//                mItems = new ArrayList<String>(FileUtils.readLines(mFile));
-//            } catch (IOException e) {
-//                System.out.println("IOException:" + e);
-//            }
-//        } else{
-//            mItems = new ArrayList<String>();
-//        }
-
-    }
-
-    private void writeItems(){
-//        File mFilesDir = getFilesDir();
-//        File mFile = new File(mFilesDir, "todo.txt");
-//        try{
-//            FileUtils.writeLines(mFile, mItems);
-//        } catch (IOException e){
-//
-//        }
-
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -207,11 +172,13 @@ public class MainActivity extends AppCompatActivity {
             String mNewItem = data.getExtras().getString("item");
             int mPosition = data.getExtras().getInt("position");
 
+            //Update array
             ToDo mTodo = new ToDo();
             mTodo.setItem(mNewItem);
             mItems.set(mPosition,mTodo);
             mItemsAdapter.notifyDataSetChanged();
 
+            //Update Database
             SQLiteDatabase db = mDbHelper.getReadableDatabase();
             ContentValues mValues = new ContentValues();
             mValues.put(SQLiteHelper.COLUMN_TODO,mNewItem);
