@@ -7,7 +7,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by kftomita on 9/23/16.
@@ -48,8 +47,8 @@ public class ToDoDataSource {
         mDatabase.delete(SQLiteHelper.TABLE_TODO, SQLiteHelper.COLUMN_ID + " = " + mId, null);
     }
 
-    public List<ToDo> getAllComments() {
-        List<ToDo> mTodos = new ArrayList<ToDo>();
+    public ArrayList<ToDo> getAllToDos() {
+        ArrayList<ToDo> mTodos = new ArrayList<ToDo>();
 
         Cursor cursor = mDatabase.query(SQLiteHelper.TABLE_TODO, mAllColumns, null, null, null, null, null);
 

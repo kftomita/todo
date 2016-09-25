@@ -10,12 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 public class EditItemActivity extends AppCompatActivity {
     EditText mEditText;
     Button mEditButton;
-    ArrayList<String> mItems;
+    String mPreviousItem;
     Integer mPosition;
     String mItem;
 
@@ -28,9 +26,9 @@ public class EditItemActivity extends AppCompatActivity {
         mEditButton = (Button) findViewById(R.id.btnEditItem);
 
         //get extras
-        mItems = getIntent().getStringArrayListExtra("items");
+        mItem = getIntent().getStringExtra("item");
+        mPreviousItem = mItem;
         mPosition = getIntent().getIntExtra("position",0);
-        mItem = mItems.get(mPosition);
         //Update TextView
         mEditText.setText(mItem);
 
@@ -38,10 +36,12 @@ public class EditItemActivity extends AppCompatActivity {
 
     public void onEdiItem(View view) {
         //Update Array with new value
-        mItems.set(mPosition,mEditText.getText().toString());
+        mItem = mEditText.getText().toString();
 
         Intent mData = new Intent();
-        mData.putExtra("items",mItems);
+        mData.putExtra("item",mItem);
+        mData.putExtra("previous_item",mPreviousItem);
+        mData.putExtra("position", mPosition);
         setResult(RESULT_OK, mData);
 
         //hide keyboard
